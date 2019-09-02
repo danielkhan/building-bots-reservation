@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Reservation</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+
+  <header>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <a class="navbar-brand" href="/">The Golden Spoon / Reservations</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Begin page content -->
+  <main role="main" class="container">
+    <%if (reservationResult && reservationResult.error) { %>
+    <div class="alert alert-warning" role="alert">
+      <%= reservationResult.error %>
+    </div>
+    <% } else if(reservationResult && reservationResult.success) { %>
+    <div class="alert alert-success" role="alert">
+      <%= reservationResult.success %>
+    </div>
+    <% } %>
+
+    <h1>New Reservation</h1>
+    <form method="POST" action="/reservation">
+      <div class="row">
+        <div class="col">
+          <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+            <input type="text" name="datetime" class="form-control datetimepicker-input" data-target="#datetimepicker1"
+              placeholder="When?" required value="<%= formdata && formdata.datetime ? formdata.datetime : '' %>" />
+            <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+              <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <input class="form-control" name="numberOfGuests"
+            value="<%= formdata && formdata.numberOfGuests ? formdata.numberOfGuests : '' %>"
+            placeholder="Number of guests?" type="number" max="4" min="1" required />
+        </div>
+        <div class="col">
+          <input class="form-control" name="customerName" placeholder="Customer name" type="text"
+            value="<%= formdata && formdata.customerName ? formdata.customerName : '' %>" required />
+        </div>
+        <div class="col">
+          <button type="submit" class="btn btn-primary">Request Reservation</button>
+        </div>
+      </div>
+    </form>
+    <hr>
+    <table class="table table-striped table-dark">
+      <thead>
+        <tr>
+          <th scope="col">When</th>
+          <th scope="col">Customer name</th>
+          <th scope="col">Number of guests</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% reservations.forEach(function(reservation){ %>
+        <tr>
+          <td><%= moment.unix(reservation.datetime).format('L LT') %></td>
+          <td><%= reservation.customerName %></td>
+          <td><%= reservation.numberOfGuests %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </main>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $('#datetimepicker1').datetimepicker();
+    });
+  </script>
+</body>
+
+</html>
