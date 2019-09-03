@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@slack/events-api": "^2.3.0",
+    "@slack/web-api": "^5.1.0",
     "debug": "~2.6.9",
     "dotenv": "^8.0.0",
     "ejs": "~2.5.7",
