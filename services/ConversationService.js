@@ -35,7 +35,7 @@ class ConversationService {
       conversation.followUp = 'Would you tell me your name please?';
       return context;
     }
-    conversation.complete = false;
+    conversation.complete = true;
     return context;
   }
 }
