@@ -10,6 +10,11 @@ class ConversationService {
       };
     }
 
+    if (!text) {
+      context.conversation.followUp = 'Hey back!';
+      return context;
+    }
+
     const entities = await witService.query(text);
     context.conversation.entities = { ...context.conversation.entities, ...entities };
 

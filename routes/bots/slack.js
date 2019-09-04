@@ -3,6 +3,8 @@ const { createEventAdapter } = require('@slack/events-api');
 const { WebClient } = require('@slack/web-api');
 const moment = require('moment');
 
+const ConversationService = require('../../services/ConversationService');
+
 const router = express.Router();
 
 function createSessionId(channel, user, ts) {
@@ -27,22 +29,25 @@ module.exports = (params) => {
     const mention = /<@[A-Z0-9]+>/;
     const eventText = event.text.replace(mention, '').trim();
 
+    const context = await ConversationService.run(witService, eventText, session.context);
+    const { conversation } = context;
+    const { entities } = conversation;
+    console.log(entities);
     let text = '';
 
-    if (!eventText) {
-      text = 'Hey!';
+    if (!conversation.complete) {
+      text = conversation.followUp;
     } else {
-      const entities = await witService.query(eventText);
-      const { intent, customerName, reservationDateTime, numberOfGuests } = entities;
+      const {
+        intent,
+        customerName,
+        reservationDateTime,
+        numberOfGuests,
+      } = entities;
 
-      if (!intent || intent !== 'reservation' || !customerName || !reservationDateTime || !numberOfGuests) {
-        text = 'Sorry - could you rephrase that?';
-        console.log(entities);
-      } else {
-        const reservationResult = await reservationService
-          .tryReservation(moment(reservationDateTime).unix(), numberOfGuests, customerName);
-        text = reservationResult.success || reservationResult.error;
-      }
+      const reservationResult = await reservationService
+        .tryReservation(moment(reservationDateTime).unix(), numberOfGuests, customerName);
+      text = reservationResult.success || reservationResult.error;
     }
 
     return slackWebClient.chat.postMessage({
