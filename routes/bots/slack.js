@@ -50,6 +50,11 @@ module.exports = (params) => {
       text = reservationResult.success || reservationResult.error;
     }
 
+    if (conversation.exit || conversation.complete) {
+      // eslint-disable-next-line no-param-reassign
+      session.context.conversation = {};
+    }
+
     return slackWebClient.chat.postMessage({
       text,
       channel: session.context.slack.channel,

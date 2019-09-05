@@ -18,9 +18,21 @@ class ConversationService {
     const entities = await witService.query(text);
     context.conversation.entities = { ...context.conversation.entities, ...entities };
 
+    if (context.conversation.entities.bye) {
+      context.conversation.followUp = 'Ok, bye!';
+      context.conversation.exit = true;
+      return context;
+    }
+
     if (context.conversation.entities.intent === 'reservation') {
       return ConversationService.intentReservation(context);
     }
+
+    if (context.conversation.entities.greetings) {
+      context.conversation.followUp = 'Hello, this is Resi. What can I do for you?';
+      return context;
+    }
+
     context.conversation.followUp = 'Could you rephrase that?';
     return context;
   }

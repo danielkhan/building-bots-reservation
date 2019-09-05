@@ -13,7 +13,9 @@ class WitService {
     const extractedEntities = {};
 
     Object.keys(entities).forEach((key) => {
-      extractedEntities[key] = entities[key][0].value;
+      if (entities[key][0].confidence > 0.7) {
+        extractedEntities[key] = entities[key][0].value;
+      }
     });
     return extractedEntities;
   }
