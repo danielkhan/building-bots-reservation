@@ -1,6 +1,6 @@
 const express = require('express');
 
-// Install alexa-sdk-core AND alexa-sdk-model
+// Install ask-sdk-core AND ask-sdk-model
 const Alexa = require('ask-sdk-core');
 const moment = require('moment');
 
