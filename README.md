@@ -16,3 +16,5 @@ The master branch contains the initial version to get started with, while the br
   ```
 * With a branch you want to use checked out, run `npm install` and `npm run dev`
 * This will run the application via nodemon and it will listen on `http://localhost:3000`
+
+# Johan K. Rhodes
